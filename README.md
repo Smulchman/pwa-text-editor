@@ -8,7 +8,7 @@
 
 ## Description
 
-This is a simple text editor built as a progressive web application
+This is a simple text editor built as a progressive web application.
 
 ## Usage
 
