@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
-const { InjectManifest } = require('workbox-webpack-plugin');
+const { InjectManifest, GenerateSW } = require('workbox-webpack-plugin');
 
 // Added workbox plugins for a service worker and manifest file.
 // Added CSS loaders and babel to webpack
@@ -21,12 +21,25 @@ module.exports = {
     plugins: [
       new HtmlWebpackPlugin({
         template: './index.html',
-        title: 'Webpack Plugin',
+        title: 'J.A.T.E',
       }),
       new MiniCssExtractPlugin(),
+      // looked at the docs and Inject Manifest does not have a 'runTimeCaching' option
       new InjectManifest({
-        swSrc: './src/sw.js',
-        swDest: 'sw.js'
+        swSrc: './src-sw.js',
+        swDest: 'sw.js',
+      }),
+      new GenerateSW({
+        exclude: [/\.(png|svg|jpg|jpeg|gif|ico)$/i],
+        runtimeCaching: [
+          {
+            urlPattern: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'image-cache'
+            },
+          },
+        ],
       }),
       new WebpackPwaManifest({
         // Create a manifest.json:
@@ -52,6 +65,10 @@ module.exports = {
         {
           test: /\.css$/i,
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        },
+        {
+          test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
+          type: 'asset/resource',
         },
         {
           test: /\.m?js$/,
