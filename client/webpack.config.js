@@ -27,13 +27,13 @@ module.exports = {
       // looked at the docs and Inject Manifest does not have a 'runTimeCaching' option
       new InjectManifest({
         swSrc: './src-sw.js',
-        swDest: 'sw.js',
+        swDest: 'src-sw.js',
       }),
       new GenerateSW({
-        exclude: [/\.(png|svg|jpg|jpeg|gif|ico)$/i],
+        exclude: [/\.(png|svg|jpg|jpeg|gif)$/i],
         runtimeCaching: [
           {
-            urlPattern: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
+            urlPattern: /\.(png|svg|jpg|jpeg|gif)$/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'image-cache'
@@ -53,8 +53,9 @@ module.exports = {
         icons: [
           {
             src: path.resolve('src/images/logo.png'),
-            sizes: [96, 128, 192, 256, 384, 512]
-          },
+            sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join("assets", "icons"),
+          }
         ]
       }),
       
@@ -67,7 +68,7 @@ module.exports = {
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
         {
-          test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
           type: 'asset/resource',
         },
         {
