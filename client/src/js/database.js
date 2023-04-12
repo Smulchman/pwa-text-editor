@@ -1,5 +1,7 @@
+// destructuring openDB
 import { openDB } from 'idb';
 
+// if this version of the db hasn't been opened before on a users computer it will be 'upgraded' to the current schema
 const initdb = async () =>
   openDB('jate', 1, {
     upgrade(db) {
@@ -7,6 +9,7 @@ const initdb = async () =>
         console.log('jate database already exists');
         return;
       }
+      // setting autoincrement to false because we only want a single database item anyways
       db.createObjectStore('jate', { keyPath: 'id', autoIncrement: false });
       console.log('jate database created');
     },
@@ -32,6 +35,8 @@ export const getDb = async () => {
   const request = store.get(1);
   const result = await request;
   console.log('result.value', result);
+  // the use of the question mark here denotes that if it throws an error, just accept it as undefined.
+  // this came from Max and Ben because I had noticed that when left undefined result.value broke the app on initialization
   return result?.value;
 };
 

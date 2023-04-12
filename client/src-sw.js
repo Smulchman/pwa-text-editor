@@ -27,6 +27,7 @@ warmStrategyCache({
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
 // Implement image caching
+// not sure if this is necessary with the generatesw in the config or if the generatesw is necessary with this. Keeping both for now, if it aint broke...
 registerRoute(
   ({ request }) => request.destination === 'image',
   new CacheFirst({

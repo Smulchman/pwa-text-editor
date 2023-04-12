@@ -25,6 +25,7 @@ module.exports = {
       }),
       new MiniCssExtractPlugin(),
       // looked at the docs and Inject Manifest does not have a 'runTimeCaching' option
+      // as such, using Generating a standard service worker below to cache our images.
       new InjectManifest({
         swSrc: './src-sw.js',
         swDest: 'src-sw.js',
@@ -64,14 +65,17 @@ module.exports = {
     module: {
       rules: [
         {
+          // compiling our css with MiniCSSExtract
           test: /\.css$/i,
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
         {
+          // marking images as static assets
           test: /\.(png|svg|jpg|jpeg|gif)$/i,
           type: 'asset/resource',
         },
         {
+          // compiling our js with babel
           test: /\.m?js$/,
           exclude: /(node_modules|bower_components)/,
           use: {
